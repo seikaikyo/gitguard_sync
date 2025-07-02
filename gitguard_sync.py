@@ -5,7 +5,7 @@ GitGuard Sync - Git 倉庫安全同步守護者
 支援 GitLab 和 GitHub 雙平台同步，並整合 GitGuardian 專業機敏資料掃描
 
 作者: 
-版本: 3.0.0
+版本: 3.0.1 (修復版)
 """
 
 import os
@@ -64,6 +64,9 @@ class GitGuardSyncGUI:
         self.gitguardian_api_key = os.getenv('GITGUARDIAN_API_KEY', '')
         self.security_patterns = self._init_security_patterns()
 
+        # 初始化線程控制
+        self.stop_threads = threading.Event()
+
         # 再設定 GUI
         self.root = tk.Tk()
         self.setup_window()
@@ -75,7 +78,7 @@ class GitGuardSyncGUI:
 
     def setup_window(self):
         """設定主視窗"""
-        self.root.title("GitGuard Sync v3.0 - Git 倉庫安全同步守護者")
+        self.root.title("GitGuard Sync v3.0.1 - Git 倉庫安全同步守護者")
         self.root.geometry("900x700")
         self.root.minsize(800, 600)
 
@@ -154,27 +157,29 @@ class GitGuardSyncGUI:
         title_frame = ttk.Frame(parent)
         title_frame.pack(fill=tk.X, pady=(0, 10))
 
-        # ASCII 藝術標題
+        # ASCII 藝術標題 - 中文版，置中顯示
         ascii_title = """
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║  ██████╗ ██╗████████╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗              ║
-║ ██╔════╝ ██║╚══██╔══╝██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗             ║
-║ ██║  ███╗██║   ██║   ██║  ███╗██║   ██║███████║██████╔╝██║  ██║             ║
-║ ██║   ██║██║   ██║   ██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║             ║
-║ ╚██████╔╝██║   ██║   ╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝             ║
-║  ╚═════╝ ╚═╝   ╚═╝    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝              ║
+║   ██████╗ ██╗████████╗  ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗            ║
+║  ██╔════╝ ██║╚══██╔══╝ ██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗           ║
+║  ██║  ███╗██║   ██║    ██║  ███╗██║   ██║███████║██████╔╝██║  ██║           ║
+║  ██║   ██║██║   ██║    ██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║           ║
+║  ╚██████╔╝██║   ██║    ╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝           ║
+║   ╚═════╝ ╚═╝   ╚═╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝            ║
 ║                                                                              ║
-║  ███████╗██╗   ██╗███╗   ██╗ ██████╗    ██╗   ██╗██████╗ ██╗██████╗         ║
-║  ██╔════╝╚██╗ ██╔╝████╗  ██║██╔════╝    ██║   ██║╚════██╗██║██╔══██╗        ║
-║  ███████╗ ╚████╔╝ ██╔██╗ ██║██║         ██║   ██║ █████╔╝██║██████╔╝        ║
-║  ╚════██║  ╚██╔╝  ██║╚██╗██║██║         ╚██╗ ██╔╝ ╚═══██╗██║██╔══██╗        ║
-║  ███████║   ██║   ██║ ╚████║╚██████╗     ╚████╔╝ ██████╔╝██║██████╔╝        ║
-║  ╚══════╝   ╚═╝   ╚═╝  ╚═══╝ ╚═════╝      ╚═══╝  ╚═════╝ ╚═╝╚═════╝         ║
+║     ███████╗██╗   ██╗███╗   ██╗ ██████╗    ██╗   ██╗██████╗ ██╗██████╗      ║
+║     ██╔════╝╚██╗ ██╔╝████╗  ██║██╔════╝    ██║   ██║╚════██╗██║██╔══██╗     ║
+║     ███████╗ ╚████╔╝ ██╔██╗ ██║██║         ██║   ██║ █████╔╝██║██████╔╝     ║
+║     ╚════██║  ╚██╔╝  ██║╚██╗██║██║         ╚██╗ ██╔╝ ╚═══██╗██║██╔══██╗     ║
+║     ███████║   ██║   ██║ ╚████║╚██████╗     ╚████╔╝ ██████╔╝██║██████╔╝     ║
+║     ╚══════╝   ╚═╝   ╚═╝  ╚═══╝ ╚═════╝      ╚═══╝  ╚═════╝ ╚═╝╚═════╝      ║
+║                                                                              ║
+║                         🔐 Git 倉庫安全同步守護者 🔐                         ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
         """
 
         title_text = tk.Text(title_frame,
-                             height=15,
+                             height=16,
                              wrap=tk.NONE,
                              font=self.font_ascii,
                              bg=self.colors['bg_primary'],
@@ -185,18 +190,24 @@ class GitGuardSyncGUI:
 
         title_text.config(state=tk.NORMAL)
         title_text.insert(tk.END, ascii_title)
+
+        # 將文字置中
+        title_text.tag_add("center", "1.0", "end")
+        title_text.tag_config("center", justify='center')
+
         title_text.config(state=tk.DISABLED)
 
-        # 副標題
+        # 副標題 - 置中
         subtitle_frame = ttk.Frame(title_frame)
         subtitle_frame.pack(fill=tk.X, pady=(5, 0))
 
         subtitle = ttk.Label(
             subtitle_frame,
-            text="🔐 Git 倉庫安全同步守護者 | 支援雙平台同步 + GitGuardian 安全掃描",
+            text="🔐 Git 倉庫安全同步守護者 | 支援雙平台同步 + GitGuardian 安全掃描 🔐",
             font=self.font_title,
-            foreground=self.colors['text_secondary'])
-        subtitle.pack()
+            foreground=self.colors['text_secondary'],
+            anchor="center")
+        subtitle.pack(expand=True)
 
     def create_control_panel(self, parent):
         """創建控制面板"""
@@ -326,7 +337,7 @@ class GitGuardSyncGUI:
                    command=self.save_log).pack(side=tk.LEFT)
 
         # 初始化日誌
-        self.log("GitGuard Sync v3.0 啟動成功")
+        self.log("GitGuard Sync v3.0.1 啟動成功")
         self.log("=" * 50)
 
     def create_status_bar(self, parent):
@@ -776,6 +787,8 @@ class GitGuardSyncGUI:
     def run(self):
         """執行主程式"""
         try:
+            # 設置窗口關閉處理
+            self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
             self.refresh_repo()
             self.root.mainloop()
         except KeyboardInterrupt:
@@ -783,6 +796,21 @@ class GitGuardSyncGUI:
         except Exception as e:
             self.log(f"程式執行錯誤: {e}", "ERROR")
             messagebox.showerror("錯誤", f"程式執行錯誤: {e}")
+        finally:
+            # 確保線程安全結束
+            if hasattr(self, 'stop_threads'):
+                self.stop_threads.set()
+
+    def on_closing(self):
+        """窗口關閉時的處理"""
+        try:
+            self.log("程式正在關閉...")
+            # 設置停止標誌
+            self.stop_threads.set()
+            # 銷毀視窗
+            self.root.destroy()
+        except Exception as e:
+            print(f"關閉程式時發生錯誤: {e}")
 
 
 # 對話框類別
@@ -1589,7 +1617,7 @@ class AboutDialog:
         subtitle_label.pack(pady=(0, 20))
 
         # 版本資訊
-        info_text = """版本: 3.0.0
+        info_text = """版本: 3.0.1 (修復版)
         
 功能特色:
 • 🔐 專業安全掃描 (本地 + GitGuardian API)
@@ -1620,12 +1648,6 @@ class AboutDialog:
                    command=lambda: webbrowser.open(
                        "https://github.com/seikaikyo/gitguard-sync")).pack(
                            side=tk.LEFT, padx=(0, 10))
-
-        ttk.Button(
-            link_frame,
-            text="📧 聯絡作者",
-            command=lambda: webbrowser.open("mailto:noreply@example.com")).pack(
-                side=tk.LEFT)
 
         # 關閉按鈕
         ttk.Button(main_frame, text="關閉",
