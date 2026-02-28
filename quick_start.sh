@@ -39,7 +39,7 @@ show_banner() {
 EOF
     echo -e "${NC}"
     echo -e "${PURPLE}🔐 Git 倉庫安全同步守護者 - 快速開始腳本 v3.0.1 (修復版)${NC}"
-    echo -e "${BLUE}作者:  | 修復所有已知問題${NC}"
+    echo -e "${BLUE}修復所有已知問題${NC}"
     echo ""
 }
 
@@ -452,7 +452,7 @@ show_usage_detailed() {
     echo ""
     echo -e "${GREEN}📞 技術支援:${NC}"
     echo "   - GitHub: https://github.com/seikaikyo/gitguard-sync"
-    echo "   - 作者: "
+    echo "   - 專案: https://github.com/seikaikyo/gitguard-sync"
     echo ""
     echo -e "${PURPLE}🎉 修復內容 (v3.0.1):${NC}"
     echo "   ✅ 修復程式無法正常關閉問題"

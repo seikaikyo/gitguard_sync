@@ -4,7 +4,6 @@ GitGuard Sync - Git 倉庫安全同步守護者
 功能強大的 Git 倉庫同步工具，具備現代化的 GUI 介面
 支援 GitLab 和 GitHub 雙平台同步，並整合 GitGuardian 專業機敏資料掃描
 
-作者: 
 版本: 3.0.1 (修復版)
 """
 
@@ -1633,7 +1632,6 @@ class AboutDialog:
 • GitPython 庫
 • GitGuardian API
 
-作者: 
 許可證: MIT License"""
 
         info_label = ttk.Label(main_frame, text=info_text, justify=tk.LEFT)

@@ -391,7 +391,6 @@ VSVersionInfo(
 - 現代化 GUI 介面
 
 📞 技術支援:
-- 作者: 
 - 專案網頁: https://github.com/seikaikyo/gitguard-sync
 
 ⚠️  注意事項:

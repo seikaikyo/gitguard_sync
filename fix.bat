@@ -148,6 +148,6 @@ goto :end
 :end
 echo.
 echo 🙏 感謝使用 GitGuard Sync！
-echo 💡 如有問題請聯絡: noreply@example.com
+echo 💡 如有問題請至 GitHub 回報
 echo.
 pause

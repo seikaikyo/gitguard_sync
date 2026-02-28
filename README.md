@@ -393,7 +393,6 @@ git pull origin main
 
 ### 聯絡方式
 
-- **作者**: 
 - **GitHub**: [https://github.com/seikaikyo/gitguard-sync](https://github.com/seikaikyo/gitguard-sync)
 
 ### 問題回報
@@ -425,7 +424,7 @@ git pull origin main
 ```
 MIT License
 
-Copyright (c) 2024 
+Copyright (c) 2024
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

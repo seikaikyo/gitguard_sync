@@ -213,8 +213,6 @@ if exist "%EXE_PATH%" (
         echo    - 現代化 GUI 介面
         echo.
         echo 📞 技術支援:
-        echo    - 作者: 
-        echo    - Email: noreply@example.com
         echo    - GitHub: https://github.com/seikaikyo/gitguard-sync
         echo.
         echo ⚠️  注意事項:
@@ -281,6 +279,6 @@ echo 📖 使用說明: %cd%\%DIST_DIR%\README.txt
 echo.
 echo 🔗 相關連結:
 echo    - 專案網頁: https://github.com/seikaikyo/gitguard-sync
-echo    - 技術支援: noreply@example.com
+echo    - 技術支援: https://github.com/seikaikyo/gitguard-sync
 echo.
 pause
