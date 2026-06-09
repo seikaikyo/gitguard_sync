@@ -105,11 +105,7 @@ chmod +x quick_start.sh
 ./quick_start.sh
 ```
 
-**Windows:**
-
-```cmd
-quick_start.bat
-```
+> Windows 使用者請改用「方法二：直接執行」。
 
 ### 方法二：直接執行
 
@@ -119,12 +115,6 @@ pip install gitpython requests
 
 # 執行程式
 python3 gitguard_sync.py
-```
-
-### 方法三：使用跨平台啟動器
-
-```bash
-python3 launcher.py
 ```
 
 ## 📦 安裝指南
@@ -139,17 +129,15 @@ cd gitguard-sync
 ### 2. 安裝依賴
 
 ```bash
-# 使用 pip 安裝
-pip install -r requirements.txt
-
-# 或手動安裝核心依賴
+# 安裝核心依賴
 pip install gitpython requests
 ```
 
 ### 3. 驗證安裝
 
 ```bash
-python3 gitguard_sync.py --version
+# 啟動程式，能開啟 GUI 即代表依賴安裝完成
+python3 gitguard_sync.py
 ```
 
 ### 4. 可選：設定 GitGuardian API
